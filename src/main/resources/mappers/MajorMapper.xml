@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hjy.dao.MajorMapper" >
+  <resultMap id="BaseResultMap" type="com.hjy.entity.Major" >
+    <constructor >
+      <idArg column="major_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="major_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    major_id, major_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_major
+    where major_id = #{majorId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_major
+    where major_id = #{majorId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.hjy.entity.Major" >
+    insert into tb_major (major_id, major_name)
+    values (#{majorId,jdbcType=VARCHAR}, #{majorName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hjy.entity.Major" >
+    insert into tb_major
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="majorId != null" >
+        major_id,
+      </if>
+      <if test="majorName != null" >
+        major_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="majorId != null" >
+        #{majorId,jdbcType=VARCHAR},
+      </if>
+      <if test="majorName != null" >
+        #{majorName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hjy.entity.Major" >
+    update tb_major
+    <set >
+      <if test="majorName != null" >
+        major_name = #{majorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where major_id = #{majorId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hjy.entity.Major" >
+    update tb_major
+    set major_name = #{majorName,jdbcType=VARCHAR}
+    where major_id = #{majorId,jdbcType=VARCHAR}
+  </update>
+
+
+  <delete id="deleteByMajorIds">
+    delete from tb_major
+    where major_id in
+    <foreach collection="majorIdList" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+
+  </delete>
+
+  <select id="getList" resultType="com.hjy.entity.Major">
+    select
+    <include refid="Base_Column_List" />
+    from tb_major
+  </select>
+</mapper>
